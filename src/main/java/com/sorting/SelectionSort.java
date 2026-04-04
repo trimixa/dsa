@@ -9,7 +9,7 @@ public class SelectionSort {
      *
      * @param array The integer array to be sorted.
      */
-    public void selectionSortBruteForce(int[] array) {
+    public void selectionSort(int[] array) {
 
         // OUTER LOOP: Selects the "target" position we are trying to fill.
         // As the loop progresses, the left side of the array becomes sorted.
