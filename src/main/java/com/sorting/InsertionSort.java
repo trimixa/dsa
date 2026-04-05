@@ -13,10 +13,10 @@ public class InsertionSort {
      * 3. Use an inner loop to shift the remaining larger elements to the right
      * until the correct spot for the selected element is found.
      *
-     * @param array The integer array to be sorted.
+     * @param arr The integer array to be sorted.
      */
-    public void insertionSort(int[] array) {
-        int n = array.length;
+    public void insertionSort(int[] arr) {
+        int n = arr.length;
 
         // OUTER LOOP: Start at index 1.
         // We assume the first element (index 0) is already "sorted" in its own sub-list.
@@ -24,7 +24,7 @@ public class InsertionSort {
 
             // Step 1: Select the element we want to position in this iteration.
             // We save it in 'key' because we might overwrite its original spot during shifting.
-            int key = array[i];
+            int key = arr[i];
 
             // Step 2: Set 'j' to point to the last element of the ALREADY SORTED section.
             // This is the element immediately to the left of our key.
@@ -33,11 +33,11 @@ public class InsertionSort {
             // INNER LOOP: Compare the 'key' with elements in the sorted section (moving right to left).
             // Keep going as long as we haven't reached the start of the array (j >= 0)
             // AND the current sorted element is larger than our key.
-            while (j >= 0 && array[j] > key) {
+            while (j >= 0 && arr[j] > key) {
 
                 // The element is larger than the key, so we shift it one spot to the right
                 // to make room for our key.
-                array[j + 1] = array[j];
+                arr[j + 1] = arr[j];
 
                 // Move one spot further left to check the next element in the sorted section.
                 j--;
@@ -46,7 +46,7 @@ public class InsertionSort {
             // Step 3: We found the correct spot! (Either we reached the start of the array,
             // or we found an element smaller than the key).
             // Insert the key into its final sorted position.
-            array[j + 1] = key;
+            arr[j + 1] = key;
         }
     }
 }

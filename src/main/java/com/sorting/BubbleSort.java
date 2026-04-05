@@ -12,6 +12,8 @@ package com.sorting;
 
 public class BubbleSort {
     public void BubbleSort(int[] arr) {
-
+        for (int i = 0; i < arr.length; i++) {
+            
+        }
     }
 }
