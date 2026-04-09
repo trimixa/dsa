@@ -1,35 +1,61 @@
 package com.arrays.hard;
 
 public class CountInversions {
+
+    // 1. The Public API
     public long numberOfInversions(int[] nums) {
-        //THE BEST WAY TO COUNT INVERSIONS IS TO USE MERGE SORT AND KEEP TRACK OF THE INVERSIONS.
-        //WE THROW IN THE NUMS ARRAY IN A MODIFIED MERGE SORT.
-        return mergeSort(nums, 0, nums.length);
+        if (nums == null || nums.length <= 1) return 0;
+
+        // Use the optimal single-temp-array trick
+        int[] temp = new int[nums.length];
+        return mergeSort(nums, temp, 0, nums.length - 1);
     }
 
+    // 2. The Recursive Engine
+    private long mergeSort(int[] nums, int[] temp, int left, int right) {
+        long inversions = 0;
 
-    private void mergeSort(int[] nums, int left, int right) {
         if (left < right) {
             int mid = left + (right - left) / 2;
-            mergeSort(nums, left, mid);
-            mergeSort(nums, mid + 1, right);
-            merge(nums, left, mid, right);
+
+            // Accumulate inversions from left, right, and the merge step
+            inversions += mergeSort(nums, temp, left, mid);
+            inversions += mergeSort(nums, temp, mid + 1, right);
+            inversions += merge(nums, temp, left, mid, right);
         }
+        return inversions;
     }
 
-    private void merge(int[] nums, int left, int mid, int right) {
-        int leftArraySize = mid - left + 1;
-        int rightArraySize = right - mid;
-        int[] arrayLeft = new int[leftArraySize];
-        int[] arrayRight = new int[rightArraySize];
-        for (int i = 0; i < leftArraySize; i++) arrayLeft[i] = nums[left + i];
-        for (int i = 0; i < rightArraySize; i++) arrayRight[i] = nums[mid + i + 1];
-        int leftCounter = 0, rightCounter = 0, arrayCounter = left;
-        while (leftCounter < leftArraySize && rightCounter < rightArraySize) {
-            if (arrayLeft[leftCounter] <= arrayRight[rightCounter]) nums[arrayCounter++] = arrayLeft[leftCounter++];
-            else nums[arrayCounter++] = arrayRight[rightCounter++];
+    // 3. The Merge & Count Logic
+    private long merge(int[] nums, int[] temp, int left, int mid, int right) {
+        int lengthToCopy = right - left + 1;
+        System.arraycopy(nums, left, temp, left, lengthToCopy);
+
+        int leftPtr = left;
+        int rightPtr = mid + 1;
+        int arrayCounter = left;
+
+        long inversions = 0; // Local counter for this specific merge
+
+        while (leftPtr <= mid && rightPtr <= right) {
+            if (temp[leftPtr] <= temp[rightPtr]) {
+                nums[arrayCounter++] = temp[leftPtr++];
+            } else {
+                nums[arrayCounter++] = temp[rightPtr++];
+
+                // THE MAGIC MATH:
+                // All remaining elements in the left half are greater than temp[rightPtr]
+                // Number of remaining elements = (mid - leftPtr + 1)
+                inversions += (mid - leftPtr + 1);
+            }
         }
-        while (leftCounter < leftArraySize) nums[arrayCounter++] = arrayLeft[leftCounter++];
-        while (rightCounter < rightArraySize) nums[arrayCounter++] = arrayRight[rightCounter++];
+
+        // Copy leftovers
+        int elementsLeft = mid - leftPtr + 1;
+        if (elementsLeft > 0) {
+            System.arraycopy(temp, leftPtr, nums, arrayCounter, elementsLeft);
+        }
+
+        return inversions;
     }
 }
