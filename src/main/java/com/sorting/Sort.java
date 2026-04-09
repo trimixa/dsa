@@ -99,7 +99,12 @@ public class Sort {
         }
     }
 
-    public void mergeSort(int[] array, int left, int right) {
+    public void mergeSort(int[] array) {
+        int[] temp = new int[array.length];
+        mergeSort(array, temp, 0, array.length);
+    }
+
+    public void mergeSort(int[] array, int[] temp, int left, int right) {
 
         // Base Condition: If left is greater than or equal to right, it means the array
         // has 1 or 0 elements, which is already sorted by definition. We stop dividing.
@@ -111,13 +116,13 @@ public class Sort {
             int mid = left + (right - left) / 2;
 
             // Step 2: Recursively sort the first half (Left side)
-            mergeSort(array, left, mid);
+            mergeSort(array, temp, left, mid);
 
             // Step 3: Recursively sort the second half (Right side)
-            mergeSort(array, mid + 1, right);
+            mergeSort(array, temp, mid + 1, right);
 
             // Step 4: Merge the two sorted halves back together
-            merge(array, left, mid, right);
+            merge(array, temp, left, mid, right);
         }
     }
 
@@ -126,54 +131,26 @@ public class Sort {
      * The first sub-array is array[left...mid]
      * The second sub-array is array[mid+1...right]
      */
-    private void merge(int[] array, int left, int mid, int right) {
-
-        // Find the sizes of the two sub-arrays to be merged
-        int sizeLeft = mid - left + 1;
-        int sizeRight = right - mid;
-
-        // Create temporary arrays to hold the data from the left and right halves
-        int[] leftArray = new int[sizeLeft];
-        int[] rightArray = new int[sizeRight];
-
-        // Copy data into the temporary arrays
-        for (int i = 0; i < sizeLeft; ++i) {
-            leftArray[i] = array[left + i];
-        }
-        for (int j = 0; j < sizeRight; ++j) {
-            rightArray[j] = array[mid + 1 + j];
-        }
-
-        // Initial indexes for the left, right, and merged arrays
-        int i = 0;    // Index for leftArray
-        int j = 0;    // Index for rightArray
-        int k = left; // Index for the main array
-
-        // Compare elements from the temp arrays and copy the smaller one back into the main array
-        while (i < sizeLeft && j < sizeRight) {
-            if (leftArray[i] <= rightArray[j]) {
-                array[k] = leftArray[i];
-                i++;
+    private void merge(int[] array, int[] temp, int left, int mid, int right) {
+        int lengthToCopy = right - left + 1;
+        // this copies the elements if original array from index left to index right
+        System.arraycopy(array, left, temp, left, lengthToCopy);
+        //creating pointers
+        int lPoint = left;
+        int rPoint = mid + 1;
+        int aCount = left;
+        //copying the array from temp to original
+        while (lPoint <= mid && rPoint <= right) {
+            if (temp[lPoint] < temp[rPoint]) {
+                array[aCount++] = temp[lPoint++];
             } else {
-                array[k] = rightArray[j];
-                j++;
+                array[aCount++] = temp[rPoint++];
             }
-            k++;
         }
-
-        // If the left array still has leftover elements, copy them over
-        // (This happens if all elements in the right array were smaller and already placed)
-        while (i < sizeLeft) {
-            array[k] = leftArray[i];
-            i++;
-            k++;
-        }
-
-        // If the right array still has leftover elements, copy them over
-        while (j < sizeRight) {
-            array[k] = rightArray[j];
-            j++;
-            k++;
+        //copying the remaining element of the array
+        int elementsLeft = mid - lPoint + 1;
+        if (elementsLeft > 0) {
+            System.arraycopy(temp, lPoint, array, aCount, elementsLeft);
         }
     }
 }
