@@ -10,8 +10,9 @@ public class Main {
         System.out.println(Arrays.toString(array));
 
         Sort sorting = new Sort();
-        sorting.mergeSort(array, 0, array.length-1);
+        sorting.mergeSort(array);
         System.out.println(Arrays.toString(array));
+
     }
 }
 

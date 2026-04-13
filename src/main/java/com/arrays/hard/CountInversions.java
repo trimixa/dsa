@@ -1,61 +1,42 @@
 package com.arrays.hard;
 
 public class CountInversions {
-
-    // 1. The Public API
-    public long numberOfInversions(int[] nums) {
-        if (nums == null || nums.length <= 1) return 0;
-
-        // Use the optimal single-temp-array trick
-        int[] temp = new int[nums.length];
-        return mergeSort(nums, temp, 0, nums.length - 1);
+    long numberOfInversions(int[] array) {
+        int[] temp = new int[array.length];
+        return mergeSort(array, temp, 0, array.length - 1);
     }
 
-    // 2. The Recursive Engine
-    private long mergeSort(int[] nums, int[] temp, int left, int right) {
-        long inversions = 0;
 
-        if (left < right) {
-            int mid = left + (right - left) / 2;
-
-            // Accumulate inversions from left, right, and the merge step
-            inversions += mergeSort(nums, temp, left, mid);
-            inversions += mergeSort(nums, temp, mid + 1, right);
-            inversions += merge(nums, temp, left, mid, right);
+    long mergeSort(int[] nums, int[] temp, int low, int high) {
+        long inversions = 0;                                                    //Inversions Counter
+        if (low < high) {                                                       //Base Case
+            int mid = low + (high - low) / 2;                                   //Calculating Mid-Value
+            inversions += mergeSort(nums, temp, low, mid);                      //Left SubArray Division
+            inversions += mergeSort(nums, temp, mid + 1, high);            //Right SubArray Division
+            inversions += merge(nums, temp, low, mid, high);                    //Merging Back Left & Right SubArrays
         }
-        return inversions;
+        return inversions;                                                      //Returning sum of all inversions.
     }
 
-    // 3. The Merge & Count Logic
-    private long merge(int[] nums, int[] temp, int left, int mid, int right) {
-        int lengthToCopy = right - left + 1;
-        System.arraycopy(nums, left, temp, left, lengthToCopy);
+    long merge(int[] array, int[] temp, int low, int mid, int high) {
+        System.arraycopy(array, low, temp, low, high - low + 1);        //Copy the current sub array into temp array
+        long inversions = 0;                                                    //Inversions Counter
+        int left = low;                                                         //Left Subarray Pointer
+        int right = mid + 1;                                                    //Right Subarray Pointer
+        int k = low;                                                            //Array Pointer
 
-        int leftPtr = left;
-        int rightPtr = mid + 1;
-        int arrayCounter = left;
-
-        long inversions = 0; // Local counter for this specific merge
-
-        while (leftPtr <= mid && rightPtr <= right) {
-            if (temp[leftPtr] <= temp[rightPtr]) {
-                nums[arrayCounter++] = temp[leftPtr++];
-            } else {
-                nums[arrayCounter++] = temp[rightPtr++];
-
-                // THE MAGIC MATH:
-                // All remaining elements in the left half are greater than temp[rightPtr]
-                // Number of remaining elements = (mid - leftPtr + 1)
-                inversions += (mid - leftPtr + 1);
-            }
+        //sorting elements
+        while (left <= mid && right <= high) {                                  //Running unless one of the sub array exhausts
+            if (temp[left] <= temp[right])
+                array[k++] = temp[left++];                                      //if left subarray element is smaller, then copy it to main array
+            else {
+                array[k++] = temp[right++];                                     //if right subarray element is smaller, then copy it to main array
+                inversions += mid - left + 1;                                   //inversion happens when left sorted array have elements greater than right sorted array
+            }                                                                   //since the current element is greater then rest of left sub array will form inversions
         }
 
-        // Copy leftovers
-        int elementsLeft = mid - leftPtr + 1;
-        if (elementsLeft > 0) {
-            System.arraycopy(temp, leftPtr, nums, arrayCounter, elementsLeft);
-        }
-
+        int leftovers = mid - left + 1;                                         //we find if there are any elements remaining in left subarray to be included in main array
+        if (leftovers > 0) System.arraycopy(temp, left, array, k, leftovers);   //if leftovers are there we copy them in main array
         return inversions;
     }
 }
