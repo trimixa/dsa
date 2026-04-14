@@ -20,13 +20,9 @@ public class MergeTwoSortedArraysWithoutExtraSpace {
         int l1 = nums1.length - nums2.length;
         int l2 = nums2.length;
 
-        for (int i = 0; i < l2; i++) {
-            if (nums2[i] < nums1[i]) {
-                for (int j = i; j < l1; j++) {
-                    int temp = nums1[j];
+    }
 
-                }
-            }
-        }
+    void mergeSort(int[] array, int low, int high) {
+        
     }
 }

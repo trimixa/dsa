@@ -32,7 +32,7 @@ public class CountInversions {
             else {
                 array[k++] = temp[right++];                                     //if right subarray element is smaller, then copy it to main array
                 inversions += mid - left + 1;                                   //inversion happens when left sorted array have elements greater than right sorted array
-            }                                                                   //since the current element is greater then rest of left sub array will form inversions
+            }                                                                   //since the current element is greater, then rest of left sub array will form inversions
         }
 
         int leftovers = mid - left + 1;                                         //we find if there are any elements remaining in left subarray to be included in main array
