@@ -2,10 +2,16 @@ package dsa.utility;
 
 import java.util.*;
 
+/**
+ * Utility class for generating and visualizing various types of Binary Trees.
+ * Ideal for testing Data Structures and Algorithms (DSA) solutions locally.
+ */
 public class BinaryTreeGenerator {
     private static final Random random = new Random();
 
-    // TreeNode Class
+    /**
+     * Definition for a binary tree node.
+     */
     public static class TreeNode {
         public int val;
         public TreeNode left;
@@ -18,38 +24,56 @@ public class BinaryTreeGenerator {
         }
     }
 
-    // RANDOM TREES
-    //Generate random binary tree with given depth
+    // ==========================================
+    // RANDOM & STRUCTURAL TREES
+    // ==========================================
+
+    /**
+     * Generates a completely random binary tree with a maximum depth.
+     * Nodes have a 30% chance of terminating early to create uneven structures.
+     *
+     * @param depth Maximum depth of the tree.
+     * @return The root of the random binary tree.
+     * @throws IllegalArgumentException if depth is negative.
+     */
     public static TreeNode generateRandomTree(int depth) {
+        if (depth < 0) throw new IllegalArgumentException("Depth cannot be negative.");
         if (depth == 0) return null;
         return generateRandomTreeHelper(depth);
     }
 
     private static TreeNode generateRandomTreeHelper(int depth) {
-        if (depth == 0 || random.nextDouble() < 0.3) return null; // 30% chance of null
+        if (depth == 0 || random.nextDouble() < 0.3) return null;
         TreeNode node = new TreeNode(random.nextInt(100));
         node.left = generateRandomTreeHelper(depth - 1);
         node.right = generateRandomTreeHelper(depth - 1);
         return node;
     }
 
-    //COMPLETE BINARY TREE
-    //Generate complete binary tree (all levels filled except last)
+    /**
+     * Generates a Complete Binary Tree (all levels filled left-to-right).
+     *
+     * @param nodeCount Total number of nodes in the tree.
+     * @return The root of the complete binary tree.
+     * @throws IllegalArgumentException if nodeCount is negative.
+     */
     public static TreeNode generateCompleteBinaryTree(int nodeCount) {
-        if (nodeCount <= 0) return null;
+        if (nodeCount < 0) throw new IllegalArgumentException("Node count cannot be negative.");
+        if (nodeCount == 0) return null;
+
         TreeNode root = new TreeNode(random.nextInt(100));
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
         int count = 1;
+
         while (!queue.isEmpty() && count < nodeCount) {
             TreeNode current = queue.poll();
-            // Add left child
+
             if (count < nodeCount) {
                 current.left = new TreeNode(random.nextInt(100));
                 queue.add(current.left);
                 count++;
             }
-            // Add right child
             if (count < nodeCount) {
                 current.right = new TreeNode(random.nextInt(100));
                 queue.add(current.right);
@@ -59,70 +83,90 @@ public class BinaryTreeGenerator {
         return root;
     }
 
-    //PERFECT BINARY TREE
-    //Generate perfect binary tree (all levels completely filled)
+    /**
+     * Generates a Perfect Binary Tree (all internal nodes have two children, all leaves at same level).
+     *
+     * @param depth The exact depth of the perfect tree.
+     * @return The root of the perfect binary tree.
+     * @throws IllegalArgumentException if depth is negative.
+     */
     public static TreeNode generatePerfectBinaryTree(int depth) {
+        if (depth < 0) throw new IllegalArgumentException("Depth cannot be negative.");
         if (depth == 0) return null;
-        return generatePerfectBinaryTreeHelper(depth);
-    }
 
-    private static TreeNode generatePerfectBinaryTreeHelper(int depth) {
-        if (depth == 0) return null;
         TreeNode node = new TreeNode(random.nextInt(100));
         if (depth > 1) {
-            node.left = generatePerfectBinaryTreeHelper(depth - 1);
-            node.right = generatePerfectBinaryTreeHelper(depth - 1);
+            node.left = generatePerfectBinaryTree(depth - 1);
+            node.right = generatePerfectBinaryTree(depth - 1);
         }
         return node;
     }
 
-    //BALANCED BINARY TREE
-    //Generate balanced binary tree
-    public static TreeNode generateBalancedBinaryTree(int depth) {
-        if (depth == 0) return null;
-        return generateBalancedBinaryTreeHelper(depth);
-    }
+    // ==========================================
+    // SKEWED TREES (EDGE CASE TESTING)
+    // ==========================================
 
-    private static TreeNode generateBalancedBinaryTreeHelper(int depth) {
-        if (depth == 0) return null;
-        TreeNode node = new TreeNode(random.nextInt(100));
-        if (depth > 1) {
-            node.left = generateBalancedBinaryTreeHelper(depth - 1);
-            node.right = generateBalancedBinaryTreeHelper(depth - 1);
-        }
-        return node;
-    }
+    /**
+     * Generates a strictly left-skewed tree (effectively a Linked List).
+     * Ideal for testing stack overflow / worst-case O(N) traversal times.
+     *
+     * @param nodeCount Number of nodes.
+     * @return The root of the skewed tree.
+     */
+    public static TreeNode generateLeftSkewedTree(int nodeCount) {
+        if (nodeCount < 0) throw new IllegalArgumentException("Node count cannot be negative.");
+        if (nodeCount == 0) return null;
 
-    //SKEWED TREES
-    //Generate left-skewed tree (linked list-like)
-    public static TreeNode generateLeftSkewedTree(int depth) {
-        if (depth == 0) return null;
         TreeNode root = new TreeNode(random.nextInt(100));
         TreeNode current = root;
-
-        for (int i = 1; i < depth; i++) {
+        for (int i = 1; i < nodeCount; i++) {
             current.left = new TreeNode(random.nextInt(100));
             current = current.left;
         }
         return root;
     }
 
-    //Generate right-skewed tree (linked list-like)
-    public static TreeNode generateRightSkewedTree(int depth) {
-        if (depth == 0) return null;
+    /**
+     * Generates a strictly right-skewed tree.
+     *
+     * @param nodeCount Number of nodes.
+     * @return The root of the skewed tree.
+     */
+    public static TreeNode generateRightSkewedTree(int nodeCount) {
+        if (nodeCount < 0) throw new IllegalArgumentException("Node count cannot be negative.");
+        if (nodeCount == 0) return null;
+
         TreeNode root = new TreeNode(random.nextInt(100));
         TreeNode current = root;
-        for (int i = 1; i < depth; i++) {
+        for (int i = 1; i < nodeCount; i++) {
             current.right = new TreeNode(random.nextInt(100));
             current = current.right;
         }
         return root;
     }
 
-    //BST (BINARY SEARCH TREE)
-    //Generate random BST
+    // ==========================================
+    // BINARY SEARCH TREES (BST)
+    // ==========================================
+
+    /**
+     * Generates a random, unsorted Binary Search Tree.
+     * * @param nodeCount Number of unique nodes.
+     * @param min Minimum allowable value.
+     * @param max Maximum allowable value.
+     * @return The root of the BST.
+     * @throws IllegalArgumentException if inputs are invalid or impossible to fulfill.
+     */
     public static TreeNode generateRandomBST(int nodeCount, int min, int max) {
-        if (nodeCount <= 0) return null;
+        if (nodeCount < 0) throw new IllegalArgumentException("Node count cannot be negative.");
+        if (min > max) throw new IllegalArgumentException("Min value cannot be greater than Max value.");
+        // THE FIX: Prevent infinite loop if user asks for more unique nodes than the range allows
+        if (nodeCount > (max - min + 1)) {
+            throw new IllegalArgumentException(
+                    "Impossible constraint: Requested " + nodeCount + " unique nodes, but range [" + min + "-" + max + "] only holds " + (max - min + 1) + " values."
+            );
+        }
+
         TreeNode root = null;
         Set<Integer> used = new HashSet<>();
         for (int i = 0; i < nodeCount; i++) {
@@ -138,31 +182,78 @@ public class BinaryTreeGenerator {
 
     private static TreeNode insertBST(TreeNode root, int val) {
         if (root == null) return new TreeNode(val);
-        if (val < root.val) {
-            root.left = insertBST(root.left, val);
-        } else {
-            root.right = insertBST(root.right, val);
-        }
+        if (val < root.val) root.left = insertBST(root.left, val);
+        else root.right = insertBST(root.right, val);
         return root;
     }
 
-    //FROM LEVEL-ORDER ARRAY
-    //Generate tree from level-order array (null represents missing node)
+    /**
+     * Generates a perfectly Balanced Binary Search Tree (AVL-like).
+     *
+     * @param nodeCount Number of nodes.
+     * @param min Minimum value.
+     * @param max Maximum value.
+     * @return The root of the balanced BST.
+     */
+    public static TreeNode generateBalancedBST(int nodeCount, int min, int max) {
+        if (nodeCount < 0 || min > max || nodeCount > (max - min + 1)) {
+            throw new IllegalArgumentException("Invalid bounds for Balanced BST generation.");
+        }
+
+        // 1. Generate unique numbers
+        Set<Integer> uniqueNumbers = new HashSet<>();
+        while (uniqueNumbers.size() < nodeCount) {
+            uniqueNumbers.add(random.nextInt(max - min + 1) + min);
+        }
+
+        // 2. Sort them
+        List<Integer> sortedList = new ArrayList<>(uniqueNumbers);
+        Collections.sort(sortedList);
+
+        // 3. Build tree from the middle out
+        return buildBalancedBSTHelper(sortedList, 0, sortedList.size() - 1);
+    }
+
+    private static TreeNode buildBalancedBSTHelper(List<Integer> nodes, int start, int end) {
+        if (start > end) return null;
+
+        int mid = start + (end - start) / 2;
+        TreeNode node = new TreeNode(nodes.get(mid));
+
+        node.left = buildBalancedBSTHelper(nodes, start, mid - 1);
+        node.right = buildBalancedBSTHelper(nodes, mid + 1, end);
+
+        return node;
+    }
+
+    // ==========================================
+    // UTILITY BUILDERS & PRINTERS
+    // ==========================================
+
+    /**
+     * Generates a tree from a LeetCode-style Level-Order array.
+     * Null represents a missing child node.
+     *
+     * @param values The array of Integer values.
+     * @return The root of the tree.
+     */
     public static TreeNode generateFromLevelOrder(Integer[] values) {
         if (values == null || values.length == 0 || values[0] == null) return null;
+
         TreeNode root = new TreeNode(values[0]);
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
         int i = 1;
+
         while (!queue.isEmpty() && i < values.length) {
             TreeNode current = queue.poll();
-            // Left child
+
             if (i < values.length && values[i] != null) {
                 current.left = new TreeNode(values[i]);
                 queue.add(current.left);
             }
             i++;
-            // Right child
+
             if (i < values.length && values[i] != null) {
                 current.right = new TreeNode(values[i]);
                 queue.add(current.right);
@@ -172,75 +263,30 @@ public class BinaryTreeGenerator {
         return root;
     }
 
-    // UTILITY METHODS
-    //Print tree in level-order
     public static void printLevelOrder(TreeNode root) {
         if (root == null) {
-            System.out.println("Empty tree");
+            System.out.println("[]");
             return;
         }
+        List<String> result = new ArrayList<>();
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
+
         while (!queue.isEmpty()) {
-            int levelSize = queue.size();
-            for (int i = 0; i < levelSize; i++) {
-                TreeNode current = queue.poll();
-                System.out.print(current.val + " ");
-                if (current.left != null) queue.add(current.left);
-                if (current.right != null) queue.add(current.right);
+            TreeNode current = queue.poll();
+            if (current != null) {
+                result.add(String.valueOf(current.val));
+                queue.add(current.left);
+                queue.add(current.right);
+            } else {
+                result.add("null");
             }
-            System.out.println();
         }
-    }
 
-    //Print tree in inorder
-    public static void printInorder(TreeNode root) {
-        if (root == null) return;
-        printInorder(root.left);
-        System.out.print(root.val + " ");
-        printInorder(root.right);
-    }
-
-    //Count nodes in tree
-    public static int countNodes(TreeNode root) {
-        if (root == null) return 0;
-        return 1 + countNodes(root.left) + countNodes(root.right);
-    }
-
-    //Get height of tree
-    public static int getHeight(TreeNode root) {
-        if (root == null) return 0;
-        return 1 + Math.max(getHeight(root.left), getHeight(root.right));
-    }
-
-    // DEMO
-    public static void main(String[] args) {
-        System.out.println("=== Binary Tree Generator Demo ===\n");
-        // Random tree
-        System.out.println("Random Tree (depth 3):");
-        TreeNode randomTree = generateRandomTree(3);
-        printLevelOrder(randomTree);
-        // Complete tree
-        System.out.println("\nComplete Tree (7 nodes):");
-        TreeNode completeTree = generateCompleteBinaryTree(7);
-        printLevelOrder(completeTree);
-        // Perfect tree
-        System.out.println("\nPerfect Tree (depth 3):");
-        TreeNode perfectTree = generatePerfectBinaryTree(3);
-        printLevelOrder(perfectTree);
-        // Left skewed
-        System.out.println("\nLeft Skewed Tree (depth 5):");
-        TreeNode leftSkewed = generateLeftSkewedTree(5);
-        printLevelOrder(leftSkewed);
-        // BST
-        System.out.println("\nRandom BST (5 nodes):");
-        TreeNode bst = generateRandomBST(5, 1, 50);
-        printLevelOrder(bst);
-        // From level order
-        System.out.println("\nFrom Level Order [1, 2, 3, 4, 5]:");
-        TreeNode fromArray = generateFromLevelOrder(new Integer[]{1, 2, 3, 4, 5});
-        printLevelOrder(fromArray);
-        System.out.println("\nHeight: " + getHeight(fromArray));
-        System.out.println("Node Count: " + countNodes(fromArray));
+        // Trim trailing nulls to match LeetCode output style
+        while (!result.isEmpty() && result.get(result.size() - 1).equals("null")) {
+            result.remove(result.size() - 1);
+        }
+        System.out.println("[" + String.join(", ", result) + "]");
     }
 }
