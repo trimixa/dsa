@@ -1,4 +1,4 @@
-package com.arrays.hard;
+package dsa.arrays.hard;
 
 public class CountInversions {
     long numberOfInversions(int[] array) {

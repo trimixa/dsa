@@ -1,4 +1,4 @@
-package com.arrays.hard;
+package dsa.arrays.hard;
 
 public class MergeTwoSortedArraysWithoutExtraSpace {
     //Given two integer arrays nums1 and nums2. Both arrays are sorted in non-decreasing order.

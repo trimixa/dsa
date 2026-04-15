@@ -1,4 +1,4 @@
-package com.arrays.hard;
+package dsa.arrays.hard;
 
 public class MaximumProductSubarrayInArray {
     //Given an integer array nums. Find the subarray with the largest product, and return the product of the elements present in that subarray.

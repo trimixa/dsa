@@ -1,4 +1,4 @@
-package com.sorting;
+package dsa.sorting;
 
 public class Sort {
     public void SelectionSort(int[] array) {

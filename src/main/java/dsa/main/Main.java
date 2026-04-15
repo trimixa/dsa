@@ -1,6 +1,7 @@
-package com.main;
+package dsa.main;
 
-import com.sorting.*;
+import dsa.sorting.Sort;
+import dsa.utility.DataGenerators;
 
 import java.util.Arrays;
 
