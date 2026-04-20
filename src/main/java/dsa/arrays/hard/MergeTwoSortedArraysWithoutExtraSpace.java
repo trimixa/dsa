@@ -16,13 +16,18 @@ public class MergeTwoSortedArraysWithoutExtraSpace {
     //Output: [-7, -3, -1, 0, 2, 7, 8]
     //Explanation:
     //The merged array is: [-7, -3, -1, 0, 2, 7, 8], where [0, 2, 7, 8] are from nums1 and [-7, -3, -1] are from nums2
-    void merge(int[] nums1, int[] nums2) {
-        int l1 = nums1.length - nums2.length;
-        int l2 = nums2.length;
+
+    public static void Merge(int[] nums1, int m, int[] nums2, int n) {
+        int p1 = m - 1;     //pointer for array @param num1 last element
+        int p2 = n - 1;     //pointer for array @param num2 last element
+        int p0 = m + n - 1; //pointer for array @param num1 last index
+        // since we're merging both the arrays we only need all the elements from num2 into num1
+        // hence we run the loop till num2's exhaustion
+        while (p2 >= 0) {
+            if (p1<0 || nums2[p2] > nums1[p1]) nums1[p0--] = nums2[p2--];
+            else nums1[p0--] = nums1[p1--];
+        }
 
     }
 
-    void mergeSort(int[] array, int low, int high) {
-        
-    }
 }
