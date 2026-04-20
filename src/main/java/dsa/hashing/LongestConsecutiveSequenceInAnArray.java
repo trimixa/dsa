@@ -1,6 +1,7 @@
 package dsa.hashing;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class LongestConsecutiveSequenceInAnArray {
     //Given an array nums of n integers.
@@ -19,7 +20,7 @@ public class LongestConsecutiveSequenceInAnArray {
     public int longestConsecutive(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         //Throw every element into a hashset
-        HashSet<Integer> numSet = new HashSet<>();
+        Set<Integer> numSet = new HashSet<>();
         for (int num : nums) numSet.add(num);
         int longestStreak = 0;
         //traverse through the HashSet to find the longest streak
